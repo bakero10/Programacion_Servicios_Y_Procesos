@@ -24,7 +24,7 @@ public class TecladoEnviar extends Thread {
 		try {
 			salida = new ObjectOutputStream(sock.getOutputStream());
 			while(true) {
-				salida.writeObject(new Mensaje(nombre, teclado.nextLine()));
+				salida.writeObject(new Mensaje(teclado.nextLine(),nombre));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
