@@ -27,7 +27,7 @@ public class BajarArchivo {
 				System.out.println("¡Fichero descargado!");				
 			}
 			else {
-				System.err.println("Error en el login");
+				System.err.println("Error en el login¡");
 			}
 			cliente.disconnect();
 			
