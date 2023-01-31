@@ -19,7 +19,7 @@ public class ClienteHTTP {
 		
 		// LA URL QUE QUEREMOS
 		HttpRequest req = HttpRequest.newBuilder()
-				.uri(URI.create("https://www.meteoclimatic.net/perfil/ESARA2200000022002A"))
+				.uri(URI.create("https://www.w3schools.com/xml/ajax_intro.asp"))
 				.GET()
 				.build();
 		
@@ -31,8 +31,10 @@ public class ClienteHTTP {
 		//HttpResponse<InputStream> resInputStream = cliente.send(req, HttpResponse.BodyHandlers.ofInputStream());
 		
 		Document doc = Jsoup.parse(res.body());
+					// si ponemos inspeccionar y copiar (copy selector) y lo introducimos en el doc.select nos imprimira los datos que queramos
+					// si lo separamos por una coma nos dara los datos que queramos concatenados
 		
-		Elements elementos = doc.select(".titolseccio");
+		Elements elementos = doc.select("#demo > button");
 		
 		for (Element e : elementos) {
 			System.out.println(e.text());
