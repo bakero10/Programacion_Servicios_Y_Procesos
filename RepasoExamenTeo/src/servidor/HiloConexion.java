@@ -18,14 +18,18 @@ public class HiloConexion implements Runnable{
 
 	public void run() {
 		try {
+			// PASO 2 RECIBIMOS LOS DATOS
+			// COGEMOS DATOS
 			DataInputStream entradaDatos = new DataInputStream(sock.getInputStream());		//hacemos la entrada de datos y le pasamos el sock con getinput...
 			String texto = entradaDatos.readUTF();											// ponemos en un string los datos que leemos
 			entradaDatos.close();															// y cerramos la entrada de datos
 			System.out.println("Texto recibido: "+texto);
 			System.out.println("IP del cliente: "+sock.getRemoteSocketAddress());
 			
+			// PASO 3 ESPERAMOS 2 SEG
 			Thread.sleep(2000);			//si esto no funciona 
 			
+			// PASO 4 CREAMOS EL HASH CON LOS DATOS
 			MessageDigest hashCreator = MessageDigest.getInstance("SHA-256");				//en este tipo de clases solo hay que instanciarlos no hace falta crear un nuevo objeto (new tatata)
 			hashCreator.update(texto.getBytes());                                           //con esto estoy cargando los datos en texto
 			byte[] hash = hashCreator.digest();												//con esto metemos la cadena en el array de bytes
@@ -35,6 +39,7 @@ public class HiloConexion implements Runnable{
 			}
 			System.out.println(textoHash);
 			
+			// PASO 5 ESCRIBIMOS EL HASH Y LO MANDAMOS
 			DataOutputStream salidaDatos = new DataOutputStream(sock.getOutputStream());
 			salidaDatos.writeUTF(textoHash);
 			salidaDatos.close();

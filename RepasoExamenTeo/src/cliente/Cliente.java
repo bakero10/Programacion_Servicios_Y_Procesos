@@ -13,31 +13,31 @@ import java.util.Scanner;
 public class Cliente {
 	// ultima clase que hay que preparar
 	public static void main(String[] args) throws UnknownHostException, IOException, NoSuchAlgorithmException {
-		Scanner teclado = new Scanner(System.in);
+		Scanner s = new Scanner(System.in);
 		
-		String textoIntroducido = teclado.nextLine();
-		Socket sock = new Socket("localhost",4321);
-		DataOutputStream salidaDatos = new DataOutputStream(sock.getOutputStream());
-		salidaDatos.writeUTF(textoIntroducido);
-		salidaDatos.close();
+		//PASO 1 CREAMOS EL PUENTE Y MANDAMOS EL MENSAJE
+		String textoIntroducido = s.nextLine();
+		Socket sock = new Socket("localhost",4321);    										 // CREAMOS EL TUNEL Y LE PASAMOS LA IP Y EL PUERTO
+		DataOutputStream salidaDatos = new DataOutputStream(sock.getOutputStream());		//CREAMOS LA SALIDA DE DATOS
+		salidaDatos.writeUTF(textoIntroducido);												//ESCRIBIMOS EL STRING EN LA SALIDA
+		salidaDatos.close();																//CERRAMOS LA SALIDA
 		
-		DataInputStream entradaDatos = new DataInputStream(sock.getInputStream());
-		String hashRecibido = entradaDatos.readUTF();
+		//PASO 6 RECIBIMOS LOS DATOS DEL SERVIDOR
+		DataInputStream entradaDatos = new DataInputStream(sock.getInputStream());			//CREAMOS ENTRADA DE DATOS
+		String hashRecibido = entradaDatos.readUTF();										//LO ESCRIBIMOS EN EL STRING
 		
-		
-		//ESTO LO HEMOS COPIADO DE HILO CONEXION Y HEMOS CAMBIADO TEXTO INTRODUCIDO
-		MessageDigest hashCreator = MessageDigest.getInstance("SHA-256");				//en este tipo de clases solo hay que instanciarlos no hace falta crear un nuevo objeto (new tatata)
-		hashCreator.update(textoIntroducido.getBytes());                                           //con esto estoy cargando los datos en texto
-		byte[] hash = hashCreator.digest();												//con esto metemos la cadena en el array de bytes
-		String textoHash = "";
-		for (byte b : hash) {
-			textoHash+=Integer.toHexString(b & 0xFF);
+		//PASO 7 CREAMOS EL HASH CON LOS DATOS RECIBIDOS 
+		MessageDigest hashCreator = MessageDigest.getInstance("SHA-256");				//CREAMOS EL HASH
+		hashCreator.update(textoIntroducido.getBytes());                                //CARGAMOS EN EL HASH EL TEXTO INTRODUCIDO EN BYTES
+		byte[] hash = hashCreator.digest();												//METEMOS EN EL ARRAY DE BYTES EL HASH CREADO
+		String textoHash = "";															//INICIALIZAMOS EL STRING
+		for (byte b : hash) {															//RECORREMOS EL ARRAY DE BYTES
+			textoHash+=Integer.toHexString(b & 0xFF);									//INTRODUCIMOS EN EL STRING BYTE BYTE
 		}
-		//IMPRIMIMOS AMBOS HASHES
+		// PASO 8 COMPROBACION DE SI LOS HASHES SON IGUALES
 		System.out.println("Hash calculado: "+textoHash);
 		System.out.println("Hash Recibido: "+hashRecibido);
-		//COMPROBAMOS QUE SEAN IGUALES
-		if(textoHash.equals(hashRecibido)) {
+		if(textoHash.equals(hashRecibido)) {											//SI LOS HASHES SON IGUALES
 			System.out.println("Los hashes son iguales");
 		}
 		else {
